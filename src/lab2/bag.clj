@@ -125,8 +125,7 @@
       ;; Начинаем обработку с корня дерева
       (TrieBag. (map-seq trie []))))
 
-
-  ;; Возвращает записи с изменёнными ключами
+;; Возвращает записи с изменёнными ключами
   (entries-with-mapped-keys [_]
     (letfn [(collect-entries [node]
               ;; Собираем текущую запись, если счетчик больше 0
@@ -140,8 +139,7 @@
                 (concat current-entry children-entries)))]
       (collect-entries trie)))
 
-
-  ;Фильтрация элементов собирает ключи, удовлетворяющие предикату.
+;Фильтрация элементов собирает ключи, удовлетворяющие предикату.
   (filter-bag [_ pred]
     (letfn [(collect-filtered-keys [node prefix]
               ;; Собираем ключи, удовлетворяющие предикату
@@ -149,8 +147,8 @@
                     current-keys (when (and (> (:count node) 0) (pred current-key))
                                    [current-key])
                     children-keys (mapcat (fn [[elem child]]
-                                             (collect-filtered-keys child (conj prefix elem)))
-                                           (:children node))]
+                                            (collect-filtered-keys child (conj prefix elem)))
+                                          (:children node))]
                 (concat current-keys children-keys)))]
       (collect-filtered-keys trie []))) ;; Начинаем с пустого префикса
 
@@ -198,8 +196,7 @@
                         (count-occurrences other key)))
                    keys1))))
 
-
-  ;; Объединение двух мультимножеств
+;; Объединение двух мультимножеств
   (merge-bags [this other]
     (let [other-keys (trie-keys other)]  ;Извлекаем все ключи из второго дерева.
       (reduce (fn [trie key] ;Каждый ключ второго мешка добавляется в первый мешок
