@@ -46,7 +46,7 @@
                                   (and (every? #(= (count-occurrences merged-bag %) (+ (count-occurrences bag1 %) (count-occurrences bag2 %))) keys1)
                                        (every? #(= (count-occurrences merged-bag %) (+ (count-occurrences bag1 %) (count-occurrences bag2 %))) keys2))))))
 
-;; Исправленный тест для filter-bag с правильным генератором предикатов
+;; Тест для filter-bag
 (deftest test-filter-bag
   (tc/quick-check 100
                   (prop/for-all [keys (gen/vector mixed-gen 1 5)
@@ -68,8 +68,8 @@
                   (prop/for-all [keys1 (gen/vector mixed-gen 1 5)
                                  keys2 (gen/vector mixed-gen 1 5)]
                                 (let [bag1 (reduce insert (TrieBag. (empty-trie)) keys1)
-                                      bag2 (reduce insert (TrieBag. (empty-trie)) keys1) ; bag2 будет равен bag1
-                                      bag3 (reduce insert (TrieBag. (empty-trie)) keys2)] ; bag3 будет отличаться от bag1
+                                      bag2 (reduce insert (TrieBag. (empty-trie)) keys1)
+                                      bag3 (reduce insert (TrieBag. (empty-trie)) keys2)]
                                   (and (compare-bags bag1 bag2)
                                        (not (compare-bags bag1 bag3)))))))
 
