@@ -4,7 +4,8 @@
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
             [lab2.bag :refer [count-occurrences, remove-one-from-bag, filter-bag, compare-bags, merge-bags, empty-trie, insert]])
-  (:import (lab2.bag TrieBag)))
+  (:import (lab2.bag TrieBag)
+           (java.util ArrayList)))
 
 ;; Генератор строк
 (def string-gen
@@ -18,9 +19,17 @@
 (def symbol-gen
   (gen/fmap #(symbol (str %)) (gen/elements (map char (range 53 173)))))
 
+;; Генератор ArrayList
+(def arraylist-gen
+  (gen/fmap (fn [vec] (let [list (ArrayList.)]
+                        (doseq [el vec]
+                          (.add list el))
+                        list))
+            (gen/vector (gen/one-of [string-gen number-gen symbol-gen]) 1 5)))
+
 ;; Генератор смешанных типов
 (def mixed-gen
-  (gen/one-of [string-gen number-gen symbol-gen]))
+  (gen/one-of [string-gen number-gen symbol-gen arraylist-gen]))
 
 (deftest test-insert-and-count-occurrences
   (tc/quick-check 100
